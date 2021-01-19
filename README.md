@@ -9,7 +9,6 @@ Requirements
 1. Install Ansible
 
 ```console
-foo@bar:~$ sudo apt-add-repository ppa:ansible/ansible
 foo@bar:~$ sudo apt update
 foo@bar:~$ sudo apt install ansible
 ```
