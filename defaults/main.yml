@@ -1,2 +1,5 @@
 ---
 # defaults file for install-boinc-server
+installation_path: /opt/boinc-server
+boinc_repo_url: https://github.com/marius311/boinc-server-docker.git
+boinc_repo_name: boinc-server-docker
