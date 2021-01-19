@@ -1,27 +1,85 @@
 Install BOINC Server
 =========
 
-A brief description of the role goes here.
+This role deploys a [BOINC server on a Docker](https://github.com/marius311/boinc-server-docker) container in the target host.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+1. Install Ansible
+
+```console
+foo@bar:~$ sudo apt-add-repository ppa:ansible/ansible
+foo@bar:~$ sudo apt update
+foo@bar:~$ sudo apt install ansible
+```
+2. Configure the target host. For instance, if the target host is `localhost`, then:
+
+Edit hosts file:
+```console
+foo@bar:~$ nano /etc/ansible/hosts
+```
+
+|/etc/ansible/hosts |
+|---|
+|<p>localhost<br>...</p>|
+
+Define target host variables:
+
+```console
+foo@bar:~$ mkdir /etc/ansible/host_vars
+foo@bar:~$ nano /etc/ansible/host_vars/localhost
+```
+
+    ansible_connection: local
+    ansible_python_interpreter: /usr/bin/python3
+    ansible_user: <<user>>
+    asible_password: <<pass>>
+    ansible_sudo_pass: <<pass>>
+    
+Edit `ansible.cfg` file:
+
+```console
+foo@bar:~$ nano /etc/ansible/ansible.cfg
+```
+
+Search the `roles_path` variable and uncomment it:
+
+|/etc/ansible/ansible.cfg |
+|---|
+|   <p>...<br># additional paths to search for roles in, colon separated<br>roles_path    = /etc/ansible/roles <br>...</p>|
+
+    # additional paths to search for roles in, colon separated
+    roles_path    = /etc/ansible/roles
+    
+Install `geerlingguy.docker` role:
+
+```console
+foo@bar:~$ ansible-galaxy install geerlingguy.docker
+```
+
+Clone the repo
+```console
+foo@bar:~$ cd /etc/ansible/roles
+foo@bar:~$ git clone https://github.com/cdanmontoya/install-boinc-server.git
+```
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+* **server_ip:** The role takes into account the current target host IP, but it is automatically detected.
+* **github_repo_url:** URL to the github BOINC docker repo.
+* **installation_path:** The folder where the github repo will be cloned.
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+* [geerling.docker](https://galaxy.ansible.com/geerlingguy/docker)
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+After f the requirements
 
     ---
     - name: test playbook
@@ -31,19 +89,6 @@ Including an example of how to use your role (for instance, with variables passe
       roles:
         - install-boinc-server
 
-Your `hosts` file should have the target host, for this example
-
-    `localhost`
-
-And you should configure the respective host vars, for this example `host_vars/localhost`:
-
-    ansible_connection: local
-    ansible_python_interpreter: /usr/bin/python3
-    ansible_user: user
-    ansible_password: pass
-    ansible_sudo_pass: pass
-
-
 License
 -------
 
@@ -51,5 +96,4 @@ BSD
 
 Author Information
 ------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+This role was made by [@cdanmontoya](https://github.com/cdanmontoya/) in collaboration with [@valcar95](https://github.com/valcar95/), [@dmrmejiar](https://github.com/dmrmejiar), [@santiago-b9826](https://github.com/santiago-b9826), [@randres-arcila](https://github.com/randres-arcila) and [@jhonatanglorys](https://github.com/jhonatanglorys) as an usefull resource for the [@dannymrock](https://github.com/dannymrock)'s Parallel Programming course at Universidad de Antioquia.
