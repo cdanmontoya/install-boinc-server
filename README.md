@@ -1,4 +1,4 @@
-Role Name
+Install BOINC Server
 =========
 
 A brief description of the role goes here.
@@ -23,9 +23,26 @@ Example Playbook
 
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
-    - hosts: servers
+    ---
+    - name: test playbook
+      hosts: localhost
+      connection: local
+      become: true
       roles:
-         - { role: username.rolename, x: 42 }
+        - install-boinc-server
+
+Your `hosts` file should have the target host, for this example
+
+    `localhost`
+
+And you should configure the respective host vars, for this example `host_vars/localhost`:
+
+    ansible_connection: local
+    ansible_python_interpreter: /usr/bin/python3
+    ansible_user: user
+    ansible_password: pass
+    ansible_sudo_pass: pass
+
 
 License
 -------

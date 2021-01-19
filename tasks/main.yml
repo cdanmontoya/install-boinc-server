@@ -1,2 +1,36 @@
 ---
 # tasks file for install-boinc-server
+
+- name: Ensure git is present
+  package:
+    name:
+      - git
+    state: present
+
+- name: Get host IP
+  shell: hostname -I | awk '{print $1}'
+  register: server_ip
+
+- name: Save IP to playbook var
+  set_fact:
+    server_ip={{ server_ip.stdout }}
+
+- name: Create installation folder
+  file:
+    path: "{{ installation_path }}"
+    state: directory
+
+- name: Clone boinc-server-docker repo
+  git:
+    repo: "{{ boinc_repo_url }}"
+    dest: "{{ installation_path }}"
+
+- name: Go to the folder and pull docker layers
+  command: chdir="{{ installation_path }}" docker-compose pull
+
+- name: Create docker compose execution command argument
+  set_fact:
+    docker_compose_args="URL_BASE=http://{{ server_ip }} docker-compose up -d"
+
+- name: Go to the folder and run docker-compose
+  shell: chdir="{{ installation_path }}" {{ docker_compose_args }}
